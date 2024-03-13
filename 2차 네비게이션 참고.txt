@@ -1,0 +1,23 @@
+2차 네비게이션 참고
+<section class="footer_mobile">
+            <div class="gnb_wrap">
+                <ul class="gnb">
+                    <li class="depth01">
+                        <a href="#">Story</a>
+                        <ul class="depth02">
+                            <li><a href="#">아비브 스토리</a></li>
+                            <li><a href="#">제품검증과 비건</a></li>
+                            <li><a href="#">콜라보레이션</a></li>
+                        </ul><!-- .depth02 end -->
+                    </li><!-- .depth01 end /1-->
+                    <li class="depth01">
+                        <a href="#">Collection</a>
+                        <ul class="depth02">
+                            <li><a href="#">어성초</a></li>
+                            <li><a href="#">제품검증과 비건</a></li>
+                            <li><a href="#">콜라보레이션</a></li>
+                        </ul><!-- .depth02 end -->
+                    </li><!-- .depth01 end /1-->
+                </ul><!-- .gnb end -->
+            </div><!-- .gnb_wrap end -->
+        </section><!-- .footer_mobile end -->

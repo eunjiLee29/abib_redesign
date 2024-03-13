@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p_아비브</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <!-- google fonts link for icons (보류)-->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0">
+
+    <script src="lib/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        window.onload = () => {
+            let header = document.querySelector('.header');
+            /* 제이쿼리 아닌 자바에선 다중선택 적용하기 위해 forEach 사용하기! */
+            let navText = document.querySelectorAll('.header .gnb-pc li');
+            let menu = document.querySelector('.header .menu img');
+            let logoFrame = document.querySelector('.header h1');
+            let logo = document.querySelector('.header h1 img');
+            //.util icon 각각 이미지 src 바꾸기
+            let search = document.querySelector('.header .search img');
+            let user = document.querySelector('.header .user img');
+            let wishlist = document.querySelector('.header .wishlist img');
+            let cart = document.querySelector('.header .cart img');
+
+            //.scroll_btn 일정 구간 내려가면 사라지게 하기
+            let scrollBtn = document.querySelector('.main_visual .scroll_btn');
+
+            window.addEventListener('scroll', () => {
+                let scrollBar = window.scrollY;
+                if (scrollBar > 0) {
+                    header.classList.add('on');
+                    navText.forEach((navText) => {
+                        navText.classList.add('on');
+                    });
+                    menu.src = 'img/icons8-menu-50_gray.png';
+                    logoFrame.classList.add('on');
+                    logo.src = 'img/logo_pc_gray.png';
+
+                    //.util icon 각각 이미지 src
+                    search.src = 'img/loupe_flat_gray.png';
+                    user.src = 'img/user_flat_g.png';
+                    wishlist.src = 'img/icons8-heart-64_gray.png';
+                    cart.src = 'img/shopping-bag_flat_g.png';
+                } else {
+                    header.classList.remove('on');
+                    navText.forEach((navText) => {
+                        navText.classList.remove('on');
+                    });
+                    menu.src = 'img/icons8-menu-50_white.png';
+                    logoFrame.classList.remove('on');
+                    logo.src = 'img/logo_white.png';
+
+                    //.util icon 각각 이미지 src
+                    search.src = 'img/loupe_flat_white.png';
+                    user.src = 'img/user_flat_white.png';
+                    wishlist.src = 'img/icons8-heart-64.png';
+                    cart.src = 'img/shopping-bag_flat_white.png';
+                } //scrollBar > 0
+                if (scrollBar > 500) {
+                    //alert()
+                    scrollBtn.style.display = 'none';
+                } else {
+                    scrollBtn.style.display = 'block';
+                }
+            });
+
+            //.product 아이템 슬라이드
+            /* const initSlider = () => {
+                const imageList = document.querySelector('.product .slider-wrapper .product--item-list');
+                const slideButtons = document.querySelectorAll('.product .slider-wrapper .slide-button');
+
+                
+                slideButtons.forEach(button => {
+                    button.addEventListener("click", () => {
+                        const direction = button.id === "prev-slide" ? -1 : 1;
+                        const scrollAmount = imageList.clientWidth * direction;
+                        imageList.scrollBy({ left: scrollAmount, behavior: "smooth" });
+                    });
+                });
+            }*/
+
+            //cont02 아이템 슬라이드
+            var swiper = new Swiper(".abib-product", {
+                slidesPerView: 3.5,
+                spaceBetween: 30,
+                grabCursor: true, //🔔🔔+ 스크롤바에 그랩커서 작동시키기
+                /* keyboard: {
+                    enabled: true,
+                }, */
+                slidesPerView: 1.5, //미디어쿼리 max-width랑 다르게 _이상일 때로 적용
+                spaceBetween: 20,
+                breakpoints: {
+                    480: {
+                        slidesPerView: 2.5,
+                        spaceBetween: 25,
+                    },
+                    769: {
+                        slidesPerView: 3.5,
+                        spaceBetween: 30,
+                    },
+                },
+                /* breakpoints: {
+                    769: {
+                        slidesPerView: 2,
+                        slidesPerGroup: 2,
+                    },
+                }, */
+                scrollbar: {
+                    el: ".swiper-scrollbar",
+                    draggable: true, //스크롤바에 드래그 가능하게 함
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+
+
+            });
+
+            //.abib-product 아이템 슬라이드 탭메뉴 구현    
+            let cont = document.querySelector('.product');
+            let tabMenuText = document.querySelectorAll('.product .category');
+            let tabMenu = document.querySelectorAll('.product .product__menu li');
+            let list = document.querySelectorAll('.product .abib-product');
+            
+
+            for (let i = 0; i < tabMenu.length; i++) {
+                tabMenu[i].addEventListener('click', () => {
+                    //alert(i)
+                    tabMenu.forEach((item) => {
+                        item.classList.remove('on');
+                    });
+                    tabMenu[i].classList.add('on');
+
+                    tabMenuText.forEach((item) => {
+                        item.classList.remove('on'); 
+                    });
+                    tabMenuText[i].classList.add('on');
+
+                    list.forEach((item) => {
+                        item.classList.remove('on');
+                    });
+                    list[i].classList.add('on');
+                });
+            }
+
+            //.cont03 이미지 좌우버튼
+            let item = document.getElementsByClassName('cont03--item')[0];
+            let itemImage = item.getElementsByTagName('img')[0];
+            let itemText = item.querySelectorAll('.cont03--item--text');
+
+            let prevBtn = item.getElementsByClassName('prev')[0];
+            let nextBtn = item.getElementsByClassName('next')[0];
+
+            let image1 = 'img/라인01-1.jpg';
+            let image2 = 'img/라인01-2.jpg';
+            let image3 = 'img/라인01-3.jpg';
+            let image4 = 'img/라인01-4.jpg';
+            let image5 = 'img/라인01-5.jpg';
+            let imageWrap = [image1, image2, image3, image4, image5]
+
+            let i = '0';
+
+            nextBtn.addEventListener('click', () => {
+                i++;
+                if (i >= imageWrap.length) {
+                    i = '0';
+                }
+
+                itemImage.src = imageWrap[i];
+
+                itemText.forEach((item) => {
+                    item.classList.remove('on');
+                });
+                itemText[i].classList.add('on'); //foreach => query셀렉터 사용
+
+
+            });
+
+            prevBtn.addEventListener('click', () => {
+                i--;
+                if (i < 0) {
+                    i = imageWrap.length - 1;
+                }
+
+                itemImage.src = imageWrap[i];
+
+                itemText.forEach((item) => {
+                    item.classList.remove('on');
+                });
+                itemText[i].classList.add('on');
+            });
+        };
+        //script end
+
+        $(function () {
+
+            //메뉴 버튼 누를 시 2차메뉴 페이지 나타나기
+            let topMenuBtn = $('.header .menu_open');
+            let fullMenuBox = $('.header .menubox_open');
+            let topCloseBtn = $('.header .menu_close');
+
+            topMenuBtn.click(function () {
+                //alert()
+                fullMenuBox.addClass('on');
+            });
+            topCloseBtn.click(function () {
+                fullMenuBox.removeClass('on');
+            });
+
+            let scrollDown = $('.main_visual .scroll_btn');
+
+            //일정 시간 뒤에 나타나기
+            setTimeout(function () {
+                /* scrollDown.css({
+                    'display' : 'block'
+                }); */
+                scrollDown.fadeIn(1000);
+            }, 1500); /* 1.5초 */
+
+            let item = $('.cont01 .item');
+            let title = $('.cont01 .title');
+            let titleSlideUp = $('.cont01 .text-effect');
+
+            //.item, .title on 클래스 조절
+            titleSlideUp.hide()
+            titleSlideUp.eq(0).show();
+            item.click(function () {
+                item.removeClass('on');
+                $(this).addClass('on');
+
+                //텍스트 위로 올라오는 애니메이션 
+                titleSlideUp.hide()
+                titleSlideUp.eq($(this).index()).show(); //display none block 대신해서 사용 -> transition 사용해 텍스트 애니메이션 적용 위해
+                title.removeClass('on');
+                title.eq($(this).index()).addClass('on'); //eq 사용해 인덱스값 찾기
+            });
+
+            
+
+            //.item 링크방지
+            $('.cont01 .item a').click(function (e) {
+                e.preventDefault();
+            });
+
+            //pc -> 2차메뉴 박스 슬라이드 업다운
+            
+            /* let pcMenuBox = $('.header .menubox_open');
+            let openBtn = $('.header .menu');
+            let closeBtn = $('.header .menu_close');
+            
+            openBtn.click(function () {
+                pcMenuBox.slideDown(300);
+            });
+
+            closeBtn.click(function () {
+                pcMenuBox.slideUp(300);
+            }); */
+
+            //모바일 -> 제이쿼리 슬라이드토글로 헤더 2차메뉴 박스 아코디언 메뉴 구현
+            $('.mobile_mainmenu--depth01').click(function () {
+                //alert()
+                $(this).children('.mobile_mainmenu--depth02').slideToggle();
+                $(this).toggleClass('on');
+                
+            });
+
+            //모바일 -> 제이쿼리 슬라이드토글로 푸터 모바일 아코디언 메뉴 구현_____>>>
+            $('.footer_mobile .depth01 .accordion').click(function () {
+                //alert()
+                $(this).next('.depth02').slideToggle();
+                $(this).toggleClass('on');
+            });
+        }); //jquery end
+    </script>
+</head>
+
+<body>
+    <div id="wrap">
+        <header class="header" id="header">
+            <div class="inner">
+                <div class="first-div">
+                    <button class="menu menu_open">
+                        <img src="img/icons8-menu-50_white.png" alt="메뉴보기">
+                    </button><!-- .menu end -->
+                    <nav class="gnb-pc pc">
+                        <ul class="gnb">
+                            <li><a href="#">Story</a></li>
+                            <li><a href="#">Collection</a></li>
+                            <li><a href="#">Product</a></li>
+                            <li><a href="#">Membership</a></li>
+                        </ul><!-- .gnb end -->
+                    </nav><!-- .gnb-pc end -->
+                </div>
+                <h1 class="pc">
+                    <a href="#">
+                        <img src="img/logo_white.png" alt="Abib">
+                    </a>
+                </h1>
+                <div class="util">
+                    <button class="search">
+                        <img src="img/loupe_flat_white.png" alt="검색하기">
+                    </button><!-- .search end -->
+                    <button class="user pc">
+                        <img src="img/user_flat_white.png" alt="로그인">
+                    </button><!-- .user end -->
+                    <button class="wishlist pc">
+                        <img src="img/icons8-heart-64.png" alt="찜한상품">
+                    </button><!-- .wishlist end -->
+                    <button class="cart">
+                        <img src="img/shopping-bag_flat_white.png" alt="장바구니">
+                    </button><!-- .cart end -->
+                </div><!-- .util end -->
+                <div class="menubox_open">
+                    <div class="menubox_open--top">
+                        <div>
+                            <button class="menu_close">
+                                <img src="img/close_Icon.png" alt="창닫기">
+                            </button>
+                            <a href="#" class="menubox_open--h1">
+                                <img src="img/logo_pc_gray.png" alt="Abib">
+                            </a>
+                        </div>
+
+                    </div><!-- .menubox_open--top end -->
+
+                    <div class="pc_mainmenu_inner pc">
+                        <div class="pc_mainmenu_row">
+                            <div class="pc_mainmenu_nav">
+                                <ul class="pc_mainmenu_ul">
+                                    <li class="pc_mainmenu_ul--depth01">
+                                        <a href="#">Story</a>
+                                        <ul class="pc_mainmenu_ul--depth02">
+                                            <li><a href="#">아비브 스토리</a></li>
+                                            <li><a href="#">제품검증과 비건</a></li>
+                                            <li><a href="#">콜라보레이션</a></li>
+                                        </ul><!-- .pc_mainmenu_ul--depth02 end -->
+                                    </li><!-- .pc_mainmenu_ul--depth01 end /1-->
+                                    <li class="pc_mainmenu_ul--depth01">
+                                        <a href="#">Collection</a>
+                                        <ul class="pc_mainmenu_ul--depth02">
+                                            <li><a href="#">저자극·진정 컬렉션</a></li>
+                                            <li><a href="#">수분·보습 컬렉션</a></li>
+                                            <li><a href="#">미백·탄력 컬렉션</a></li>
+                                            <li><a href="#">비건 컬렉션</a></li>
+                                        </ul><!-- .pc_mainmenu_ul--depth02 end -->
+                                    </li><!-- .pc_mainmenu_ul--depth01 end /2-->
+                                    <li class="pc_mainmenu_ul--depth01">
+                                        <a href="#">Product</a>
+                                        <ul class="pc_mainmenu_ul--depth02">
+                                            <li><a href="#">전체보기</a></li>
+                                            <li><a href="#">베스트</a></li>
+                                            <li><a href="#">프로모션</a></li>
+                                            <!-- <br> -->
+                                            <li><a href="#">스킨케어</a></li>
+                                            <li><a href="#">바디케어</a></li>
+                                            <li><a href="#">선케어</a></li>
+                                            <li><a href="#">메이크업</a></li>
+                                        </ul><!-- .pc_mainmenu_ul--depth02 end -->
+                                    </li><!-- .pc_mainmenu_ul--depth01 end /3-->
+                                    <li class="pc_mainmenu_ul--depth01">
+                                        <a href="#">Membership</a>
+                                    </li><!-- .pc_mainmenu_ul--depth01 end /4-->
+                                </ul><!-- .pc_mainmenu_ul end -->
+                            </div><!-- .pc_mainmenu_nav end -->
+                            <div class="pc_mainmenu_pic">
+                                <a href="#">
+                                    <figure>
+                                        <img src="img/cate_pic1.jpg" alt="Jericho rose">
+                                    </figure>
+                                </a>
+                            </div><!-- .pc_mainmenu_pic end -->
+                        </div><!-- .pc_mainmenu_row end -->
+                    </div><!-- .pc_mainmenu_inner end -->
+                    <div class="mobile_mainmenu_inner mobile">
+                        <ul class="mobile_mainmenu--gnb">
+                            <li class="mobile_mainmenu--depth01">
+                                <a href="#">Story</a>
+                                <ul class="mobile_mainmenu--depth02 on">
+                                    <li><a href="#">아비브 스토리</a></li>
+                                    <li><a href="#">제품검증과 비건</a></li>
+                                    <li><a href="#">콜라보레이션</a></li>
+                                </ul>
+                            </li><!-- mobile_mainmenu--depth01 end /1-->
+                            <li class="mobile_mainmenu--depth01">
+                                <a href="#">Collection</a>
+                                <ul class="mobile_mainmenu--depth02">
+                                    <li><a href="#">저자극·진정 컬렉션</a></li>
+                                    <li><a href="#">수분·보습 컬렉션</a></li>
+                                    <li><a href="#">미백·탄력 컬렉션</a></li>
+                                    <li><a href="#">비건 컬렉션</a></li>
+                                </ul><!-- .pc_mainmenu_ul--depth02 end -->
+                            </li><!-- mobile_mainmenu--depth01 end /2-->
+                            <li class="mobile_mainmenu--depth01">
+                                <a href="#">Product</a>
+                                <ul class="mobile_mainmenu--depth02">
+                                    <li><a href="#">전체보기</a></li>
+                                    <li><a href="#">베스트</a></li>
+                                    <li><a href="#">프로모션</a></li>
+                                    <!-- <br> -->
+                                    <li><a href="#">스킨케어</a></li>
+                                    <li><a href="#">바디케어</a></li>
+                                    <li><a href="#">선케어</a></li>
+                                    <li><a href="#">메이크업</a></li>
+                                </ul><!-- .pc_mainmenu_ul--depth02 end -->
+                            </li><!-- mobile_mainmenu--depth01 end /3-->
+                            <li class="mobile_mainmenu--depth01">
+                                <a href="#">Membership</a>
+                            </li><!-- mobile_mainmenu--depth01 end /4-->
+                        </ul><!-- .mobile_mainmenu--gnb end -->
+                    </div><!-- .mobile_mainmenu_inner end -->
+                </div><!-- .menubox_open end -->
+            </div><!-- .inner end -->
+        </header><!-- .header end -->
+        <main id="main">
+            <section class="main_visual">
+                <figure>
+                    <img class="pc-767" src="img/abib_bg01_grained.jpg" alt="메인비주얼">
+                    <img class="mobile-767 mobile_main_visual" src="img/mobile_bg_main_v.png" alt="모바일 메인비주얼">
+                </figure>
+                <div class="inner">
+                    <h2 class="pc">Abib</h2>
+                    <div class="title mobile">
+                        <h3>Sooth.</h3>
+                        <h3>Moisturize.</h3>
+                        <h3>Restore.</h3>
+                        <p>진정 케어의 기준, 아비브</p>
+                        <a href="#" class="shop-now">Shop Now</a>
+                    </div><!-- .title end -->
+                </div>
+                <a href="#" class="scroll_btn"><!-- 가상요소에 화살표 이미지 백그라운드로 불러오기 -->
+                    <!-- <svg class="circle" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <ellipse class="background" ry="60" rx="60" cy="62.5" cx="62.5" stroke-width="1" />
+                            <ellipse class="foreground" ry="60" rx="60" cy="62.5" cx="62.5" stroke-width="2" />
+                        </g>
+                    </svg> -->
+                    <svg class="circle" width="50" height="50" viewBox="0 0 50 50" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <circle class="background" cx="25" cy="25" r="24.5" stroke="white" />
+                        <circle class="foreground" cx="25" cy="25" r="24.5" stroke="white" />
+                    </svg>
+                    <span>Scroll Down</span>
+                </a><!-- .scroll_btn end -->
+            </section><!-- .main_visual end -->
+            <section class="cont01">
+                <figure class="cont01--bg">
+                    <img src="img/브랜드소개bg02_fliph.jpg" alt="배경이미지">
+                </figure>
+                <div class="inner">
+                    <div class="text-effect on">
+                        <div class="title on">
+                            <span class="category">Brand Story</span>
+                            <h3>About Abib</h3>
+                            <strong>첫번째 달을 만나다. 아비브를 만나는 순간 시작되는 새로운 당신.</strong>
+                            <p>'첫번째 달'이라는 뜻의 아비브는, 미의 순환과정의 출발점에서 가장 완벽하고 <br>
+                                순수한 제품을 완성 시키고자 합니다. 피부 본연의 무결점 상태로 돌아가도록 <br>
+                                도와주는 것이 아비브의 목표입니다.</p>
+                            <a href="#" class="view-more">View More</a>
+                        </div><!-- .title end -->
+                    </div>
+                    <div class="text-effect">
+                        <div class="title">
+                            <span class="category">Product</span>
+                            <h3>Calming Care</h3>
+                            <strong>진정 케어의 기준, 아비브</strong>
+                            <p>청정지역 추출물을 가득 담아 깨끗하고 건강하게 <br>
+                                진정 케어의 기준, 아비브와 함께 매일매일 산뜻한 피부 진정감을 느껴보세요.</p>
+                            <a href="#" class="view-more">View More</a>
+                        </div><!-- .title end /2-->
+                    </div>
+                    <div class="text-effect">
+                        <div class="title">
+                            <span class="category">Collection</span>
+                            <h3>Slow-Aging Collection</h3>
+                            <strong>슬로우에이징 아비브의 프리미엄 컬렉션</strong>
+                            <p>어성초, 수분초, 부활초 라인업 제품으로 매일매일 <br>
+                                피부의 탄력과 영양을 챙겨 생기가 되살아난 피부를 경험해보세요.</p>
+                            <a href="#" class="view-more">View More</a>
+                        </div><!-- .title end /3-->
+                    </div>
+
+                    <div class="list">
+                        <div class="item on">
+                            <a href="#">
+                                <figure>
+                                    <img src="img/texture.jpg" alt="어바웃 페이지">
+                                </figure>
+                                <span class="cont01--item--category">About</span>
+                            </a>
+                        </div><!-- .item end /01-->
+                        <div class="item">
+                            <a href="#">
+                                <figure>
+                                    <img src="img/abib_bg03_item02.jpg" alt="상품 페이지">
+                                </figure>
+                                <span class="cont01--item--category">Product</span>
+                            </a>
+                        </div><!-- .item end /02-->
+                        <div class="item">
+                            <a href="#">
+                                <figure>
+                                    <img src="img/아이템03_cont01_포토샵hue_item03.jpg" alt="컬렉션 페이지">
+                                </figure>
+                                <span class="cont01--item--category">Collection</span>
+                            </a>
+                        </div><!-- .item end /03-->
+                    </div><!-- .list end -->
+                </div><!-- .inner end -->
+            </section><!-- .cont01 end -->
+            <section class="cont02 product">
+                <div class="title">
+                    <h3>Abib Product</h3>
+                    <span class="category on">베스트 상품 추천해요.</span>
+                    <span class="category">프로모션 상품 추천해요.</span>
+                    <span class="category">스테디셀러 상품 추천해요.</span>
+                </div><!-- .title end -->
+                <ul class="product__menu">
+                    <li class="on">Best</li>
+                    <li>Promotion</li>
+                    <li>Steady Seller</li>
+                </ul><!-- .product__menu end -->
+                <!-- 🔔🔔+카트에 담기 기능 추가 -->
+                <div class="swiper abib-product on">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/베스트01.jpg" alt="부활초 파하 토너 스킨 부스터">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        부활초 파하 토너 <br>
+                                        <strong>스킨 부스터</strong>
+                                    </p>
+                                    <span class="smalltext">200ml</span>
+                                    <span class="price">₩23,000</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div> <!-- 🎈카트에담기 btn 제작 -->
+                            </a>
+                        </div><!-- .swiper-slide end /1 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/베스트02.jpg" alt="부활초 크림 뉴트리션 튜브">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        부활초 크림 <br>
+                                        <strong>뉴트리션 튜브</strong>
+                                    </p>
+                                    <span class="smalltext">75ml</span>
+                                    <span class="price">₩35,000</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /2 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/베스트03.jpg" alt="유자 프로바이오틱스 잡티 패드 바이탈라이징 터치">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        유자 프로바이오틱스 잡티 패드 <br>
+                                        <strong>바이탈라이징 터치</strong>
+                                    </p>
+                                    <span class="smalltext">140ml / 60 pads</span>
+                                    <span class="price prev-price">₩24,000</span>
+                                    <span class="price highlight">₩16,800</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /3 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/베스트04.jpg" alt="콜라겐 아이패치 부활초 젤리">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        콜라겐 아이패치 <br>
+                                        <strong>부활초 젤리</strong>
+                                    </p>
+                                    <span class="smalltext">90g / 60ea</span>
+                                    <span class="price prev-price">₩23,000</span>
+                                    <span class="price highlight">₩16,100</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /4 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/베스트06.jpg" alt="부활초 파하 콜라겐 아이크림">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        부활초 파하 <br>
+                                        <strong>콜라겐 아이크림</strong>
+                                    </p>
+                                    <span class="smalltext">200ml</span>
+                                    <span class="price">₩23,000</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /5 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/item06.jpg" alt="아크네 폼 클렌저 어성초 폼">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        아크네 폼 클렌저 <br>
+                                        <strong>어성초 폼</strong>
+                                    </p>
+                                    <span class="smalltext">150ml</span>
+                                    <span class="price prev-price">₩16,000</span>
+                                    <span class="price highlight">₩11,200</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /6 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/item07.jpg" alt="포어 클렌징 오일 어성초 오일워시">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        포어 클렌징 오일 <br>
+                                        <strong>어성초 오일워시</strong>
+                                    </p>
+                                    <span class="smalltext">200ml</span>
+                                    <span class="price prev-price">₩26,000</span>
+                                    <span class="price highlight">₩15,600</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /7 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/item08.jpg" alt="딥 클린 폼 클렌저 수분초 히알루론 폼">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        딥 클린 폼 클렌저 <br>
+                                        <strong>수분초 히알루론 폼</strong>
+                                    </p>
+                                    <span class="smalltext">200ml</span>
+                                    <span class="price prev-price">₩16,000</span>
+                                    <span class="price highlight">₩11,200</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /8 -->
+                    </div><!-- .swiper-wrapper end -->
+
+                    <!-- <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div> -->
+                    <div class="swiper-scrollbar"></div>
+                </div><!-- .swiper .abib-product end /1 -->
+                <div class="swiper abib-product">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/item08.jpg" alt="딥 클린 폼 클렌저 수분초 히알루론 폼">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        딥 클린 폼 클렌저 <br>
+                                        <strong>수분초 히알루론 폼</strong>
+                                    </p>
+                                    <span class="smalltext">200ml</span>
+                                    <span class="price prev-price">₩16,000</span>
+                                    <span class="price highlight">₩11,200</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /1 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/item06.jpg" alt="아크네 폼 클렌저 어성초 폼">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        아크네 폼 클렌저 <br>
+                                        <strong>어성초 폼</strong>
+                                    </p>
+                                    <span class="smalltext">150ml</span>
+                                    <span class="price prev-price">₩16,000</span>
+                                    <span class="price highlight">₩11,200</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /2 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/베스트04.jpg" alt="콜라겐 아이패치 부활초 젤리">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        콜라겐 아이패치 <br>
+                                        <strong>부활초 젤리</strong>
+                                    </p>
+                                    <span class="smalltext">90g / 60ea</span>
+                                    <span class="price prev-price">₩23,000</span>
+                                    <span class="price highlight">₩16,100</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /3 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/pro04.jpg" alt="콜라겐 겔 마스크 부활초 젤리">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        콜라겐 겔 마스크 <br>
+                                        <strong>부활초 젤리</strong>
+                                    </p>
+                                    <span class="smalltext">35g / 1ea</span>
+                                    <span class="price prev-price">₩5,000</span>
+                                    <span class="price highlight">₩3,500</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /4 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/pro05.jpg" alt="콜라겐 겔 마스크 어성초 젤리">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        콜라겐 겔 마스크 <br>
+                                        <strong>어성초 젤리</strong>
+                                    </p>
+                                    <span class="smalltext">35g / 1ea</span>
+                                    <span class="price prev-price">₩5,000</span>
+                                    <span class="price highlight">₩3,500</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /5 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/pro06.jpg" alt="약산성 시트 마스크 어성초 핏">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        약산성 시트 마스크 <br>
+                                        <strong>어성초 핏</strong>
+                                    </p>
+                                    <span class="smalltext">30ml / 1ea</span>
+                                    <span class="price prev-price">₩4,000</span>
+                                    <span class="price highlight">₩2,400</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /6 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/pro07.jpg" alt="약산성 시트 마스크 부활초 핏">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        약산성 시트 마스크 <br>
+                                        <strong>부활초 핏</strong>
+                                    </p>
+                                    <span class="smalltext">30ml / 1ea</span>
+                                    <span class="price prev-price">₩4,000</span>
+                                    <span class="price highlight">₩2,400</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /7 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/pro08.jpg" alt="껌딱지 시트 마스크 어성초 스티커">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        껌딱지 시트 마스크 <br>
+                                        <strong>어성초 스티커</strong>
+                                    </p>
+                                    <span class="smalltext">27ml / 1ea</span>
+                                    <span class="price prev-price">₩4,000</span>
+                                    <span class="price highlight">₩2,400</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /8 -->
+                    </div><!-- .swiper-wrapper end -->
+
+                    <!-- <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div> -->
+                    <div class="swiper-scrollbar"></div>
+                </div><!-- .swiper .abib-product end /2 -->
+                <div class="swiper abib-product">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/ss01.jpg" alt="어성초 스팟 패드 카밍 터치">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        어성초 스팟 패드 <br>
+                                        <strong>카밍 터치</strong>
+                                    </p>
+                                    <span class="smalltext">150ml / 80pads</span>
+                                    <span class="price">₩23,000</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /1 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/베스트01.jpg" alt="부활초 파하 토너 스킨 부스터">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        부활초 파하 토너 <br>
+                                        <strong>스킨 부스터</strong>
+                                    </p>
+                                    <span class="smalltext">200ml</span>
+                                    <span class="price">₩23,000</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /2 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/베스트02.jpg" alt="부활초 크림 뉴트리션 튜브">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        부활초 크림 <br>
+                                        <strong>뉴트리션 튜브</strong>
+                                    </p>
+                                    <span class="smalltext">75ml</span>
+                                    <span class="price">₩35,000</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /3 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/ss02.jpg" alt="퀵 선스틱 프로텍션 바 SPF50+ PA++++">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        퀵 선스틱 <br>
+                                        <strong>프로텍션 바 SPF50+ PA++++</strong>
+                                    </p>
+                                    <span class="smalltext">22g</span>
+                                    <span class="price">₩28,000</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /4 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/ss03.jpg" alt="수분초 히알루론 선스크린 프로텍션 튜브 SPF50+ PA++++">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        수분초 히알루론 선스크린 <br>
+                                        <strong>프로텍션 튜브 SPF50+ PA++++</strong>
+                                    </p>
+                                    <span class="smalltext">50ml</span>
+                                    <span class="price">₩25,000</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /5 -->
+                        <div class="swiper-slide">
+                            <a href="#">
+                                <figure class="product--item-image">
+                                    <img src="img/pro05.jpg" alt="콜라겐 겔 마스크 어성초 젤리">
+                                </figure>
+                                <div class="product--item-text">
+                                    <p>
+                                        콜라겐 겔 마스크 <br>
+                                        <strong>어성초 젤리</strong>
+                                    </p>
+                                    <span class="smalltext">35g / 1ea</span>
+                                    <span class="price prev-price">₩5,000</span>
+                                    <span class="price highlight">₩3,500</span>
+                                </div>
+                                <div class="product--item-textbtn_wrap">
+                                    <span class="product--item-textbtn">카트에 담기</p>
+                                </div>
+                            </a>
+                        </div><!-- .swiper-slide end /6 -->
+                    </div><!-- .swiper-wrapper end -->
+
+                    <!-- <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div> -->
+                    <div class="swiper-scrollbar"></div>
+                </div><!-- .swiper .abib-product end /3 -->
+            </section><!-- .cont02 end -->
+            <section class="cont03">
+                <div class="inner">
+                    <div class="title">
+                        <h3 class="h3-70px">Heartleaf Care</h3>
+                        <h4 class="h4-30px">진정 케어의 기준, 어성초 컬렉션</h4>
+                        <strong>민감한 피부도 걱정없는 아비브 어성초</strong>
+                        <p>청정 지역 지리산에서 자라난 어성초의 <br>
+                            산뜻한 피부 진정감을 느껴보세요.
+                        </p>
+                        <a href="#" class="view-more icon-collection">Learn More</a>
+                    </div><!-- .title end -->
+                    <div class="cont03--item">
+                        <figure>
+                            <img src="img/라인01-1.jpg" alt="어성초 카밍 토너 스킨 부스터">
+                        </figure>
+                        <div class="cont03--item--text on">
+                            <p>어성초 카밍 토너 스킨 부스터</p>
+                            <strong>₩23,000</strong>
+                        </div><!-- .cont03--item--text end /1-->
+                        <div class="cont03--item--text">
+                            <p>어성초 스팟 패드 카밍 터치</p>
+                            <strong>₩24,000</strong>
+                        </div><!-- .cont03--item--text end /2-->
+                        <div class="cont03--item--text">
+                            <p>어성초 에센스 카밍 펌프</p>
+                            <strong>₩27,000</strong>
+                        </div><!-- .cont03--item--text end /3-->
+                        <div class="cont03--item--text">
+                            <p>어성초 페이셜 미스트 카밍 스프레이</p>
+                            <strong>₩23,000</strong>
+                        </div><!-- .cont03--item--text end /4-->
+                        <div class="cont03--item--text">
+                            <p>어성초 크림 카밍 튜브</p>
+                            <strong>₩35,000</strong>
+                        </div><!-- .cont03--item--text end /5-->
+                        <div class="cont03--item--btn_wrap">
+                            <button class="prev"><img src="img/left_icons8-arrow-64_white.png" alt="이전 사진"></button>
+                            <button class="next"><img src="img/right_icons8-arrow-64_white.png" alt="다음 사진"></button>
+                        </div><!-- .cont03--item--btn_wrap end -->
+                    </div><!-- .cont03--item end -->
+                </div><!-- .inner end -->
+
+            </section><!-- .cont03 end -->
+            <section class="cont04">
+                <div class="wrap_collection">
+                    <div class="left_collection">
+                        <a href="#">
+                            <figure>
+                                <img src="img/left_collec_adj.jpg" alt="수분초 컬렉션">
+                            </figure>
+                            <div class="title">
+                                <h3 class="h3-70px">Sedum Hyaluron</h3>
+                                <h4 class="h4-30px">수분을 가득 머금은, 수분초 컬렉션</h4>
+                                <p>건조한 피부가 고민인 날, 수분초 스페셜 케어 제품으로 <br>
+                                    겉보습과 속보습까지 충전해주세요.
+                                </p>
+                                <a href="#" class="view-more icon-collection">Learn More</a>
+                            </div><!-- .title end -->
+                        </a>
+                    </div><!-- .left_collection end -->
+                    <div class="right_collection">
+                        <a href="#">
+                            <figure>
+                                <img src="img/right_collec_adj.jpg" alt="부활초 컬렉션">
+                            </figure>
+                            <div class="title">
+                                <h3 class="h3-70px">Rose of jericho</h3>
+                                <h4 class="h4-30px">탄탄한 피부 보습을 위한, 부활초 컬렉션</h4>
+                                <p>힘 없는 피부가 고민인 날, 부활초 스페셜 케어 제품으로 <br>
+                                    피부 탄력과 영양을 채워주세요.
+                                </p>
+                                <a href="#" class="view-more icon-collection">Learn More</a>
+                            </div><!-- .title end -->
+                        </a>
+                    </div><!-- .right_collection end -->
+                </div><!-- .wrap_collection end -->
+            </section><!-- .cont04 end -->
+            <section class="cont05 inner">
+                <h5>@abib.official
+                    <span class="instagram-image">
+                        <img src="img/icons8-instagram-50_gray.png" alt="인스타그램 계정 아이콘">
+                    </span>
+                </h5>
+                <div class="image-box">
+                    <div class="image-box--item">
+                        <a href="#">
+                            <figure>
+                                <img src="img/인스타그램01_res.jpg" alt="insta1">
+                            </figure>
+                        </a>
+                    </div><!-- .image-box--item end /1-->
+                    <div class="image-box--item">
+                        <a href="#">
+                            <figure>
+                                <img src="img/인스타02.jpg" alt="insta2">
+                            </figure>
+                        </a>
+                    </div><!-- .image-box--item end /2-->
+                    <div class="image-box--item">
+                        <a href="#">
+                            <figure>
+                                <img src="img/인스타03.jpg" alt="insta3">
+                            </figure>
+                        </a>
+                    </div><!-- .image-box--item end /3-->
+                    <div class="image-box--item">
+                        <a href="#">
+                            <figure>
+                                <img src="img/인스타04.jpg" alt="insta4">
+                            </figure>
+                        </a>
+                    </div><!-- .image-box--item end /4-->
+                    <div class="image-box--item">
+                        <a href="#">
+                            <figure>
+                                <img src="img/인스타05.jpg" alt="insta5">
+                            </figure>
+                        </a>
+                    </div><!-- .image-box--item end /5-->
+                    <div class="image-box--item">
+                        <a href="#">
+                            <figure>
+                                <img src="img/인스타그램06.jpg" alt="insta6">
+                            </figure>
+                        </a>
+                    </div><!-- .image-box--item end /6-->
+                </div><!-- .image-box end -->
+            </section><!-- .cont05 end -->
+        </main><!-- #main end -->
+        <footer class="footer pc" id="footer">
+            <div class="ft_inner">
+                <div class="util">
+                    <h1>
+                        <a href="#">
+                            <img src="img/logo_pc_gray_ft.png" alt="Abib">
+                        </a>
+                    </h1>
+                    <div class="sns_area">
+                        <a href="#">
+                            <!-- <img src="img/instagram_g.png" alt="인스타그램"> -->
+                            <svg width="38" height="38" viewBox="0 0 38 38" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g opacity="0.2">
+                                    <mask id="mask0_191_3373" style="mask-type:luminance" maskUnits="userSpaceOnUse"
+                                        x="6" y="6" width="26" height="26">
+                                        <path
+                                            d="M14.1368 6.99562C12.8236 7.05761 11.9267 7.26795 11.1429 7.57507C10.3315 7.89137 9.64373 8.31527 8.95953 9.00227C8.27452 9.68968 7.85384 10.3787 7.53994 11.1909C7.23603 11.9766 7.03008 12.874 6.97209 14.188C6.91452 15.5045 6.90131 15.9244 6.90773 19.2758C6.91412 22.6269 6.92891 23.0476 6.99169 24.3644C7.05447 25.6773 7.26402 26.5738 7.57114 27.358C7.88784 28.1694 8.31131 28.8568 8.9987 29.5414C9.68571 30.226 10.3751 30.6463 11.1877 30.9606C11.9727 31.2642 12.8704 31.4709 14.184 31.5285C15.5004 31.5865 15.9207 31.5993 19.2714 31.5929C22.6236 31.5865 23.0439 31.5717 24.3603 31.5093C25.6735 31.4465 26.5696 31.2362 27.3542 30.9298C28.1656 30.6123 28.8534 30.1896 29.5376 29.5022C30.2218 28.8152 30.6425 28.1258 30.9564 27.3132C31.2603 26.5282 31.467 25.6305 31.5242 24.3177C31.5818 23.0004 31.5954 22.5797 31.589 19.2287C31.5826 15.8772 31.5674 15.4573 31.505 14.1413C31.4426 12.8272 31.2323 11.9311 30.9256 11.1465C30.6085 10.3351 30.1854 9.64809 29.4984 8.96309C28.8114 8.27888 28.122 7.85739 27.3094 7.54428C26.5241 7.24036 25.6267 7.03321 24.3131 6.97643C22.9967 6.91804 22.5764 6.90525 19.2246 6.91165C15.8735 6.91805 15.4533 6.93245 14.1368 6.99562ZM14.2808 29.3071C13.0775 29.2547 12.4241 29.0548 11.9887 28.8872C11.412 28.6641 11.0005 28.3965 10.5675 27.9667C10.1352 27.5352 9.86686 27.1249 9.64173 26.5494C9.47256 26.114 9.26904 25.4613 9.21265 24.2581C9.15147 22.9572 9.13748 22.5669 9.13148 19.2714C9.12508 15.9768 9.13706 15.5865 9.19386 14.2844C9.24543 13.0819 9.44659 12.4277 9.61373 11.9926C9.83686 11.4152 10.1036 11.0045 10.5343 10.5714C10.9657 10.1384 11.376 9.87083 11.9519 9.6457C12.3869 9.47574 13.0396 9.27379 14.2424 9.21662C15.544 9.15502 15.9339 9.14183 19.2286 9.13544C22.524 9.12903 22.9143 9.14064 24.2163 9.19782C25.4188 9.2502 26.073 9.44935 26.5077 9.6177C27.0847 9.84083 27.4962 10.1068 27.9289 10.5382C28.3615 10.9697 28.6299 11.3792 28.855 11.9563C29.0249 12.3901 29.2269 13.0436 29.2837 14.246C29.3456 15.5477 29.3596 15.938 29.3656 19.2327C29.372 22.5282 29.36 22.9184 29.3029 24.2197C29.2505 25.4229 29.0509 26.0768 28.883 26.5126C28.6598 27.0889 28.3931 27.5004 27.962 27.9335C27.531 28.3649 27.1207 28.6341 26.5444 28.8592C26.1102 29.0287 25.4568 29.2311 24.2547 29.2883C22.9531 29.3495 22.5632 29.3635 19.2673 29.3695C15.9727 29.3759 15.5828 29.3635 14.2808 29.3071ZM24.3423 12.6549C24.3439 13.4722 25.0085 14.1341 25.8259 14.1325C26.6436 14.1309 27.3054 13.4666 27.3042 12.6493C27.3026 11.8319 26.638 11.1697 25.8203 11.1713C25.0025 11.1729 24.3407 11.8375 24.3423 12.6549ZM12.9112 19.2642C12.918 22.7645 15.7608 25.5957 19.2601 25.5889C22.7599 25.5821 25.5927 22.7401 25.5859 19.2399C25.5791 15.7408 22.736 12.908 19.2358 12.9148C15.7364 12.9216 12.9044 15.7648 12.9112 19.2642ZM15.1341 19.2599C15.1301 16.9881 16.9688 15.1426 19.2402 15.1386C21.5119 15.1342 23.3578 16.9721 23.3622 19.2443C23.3666 21.5164 21.5279 23.3615 19.2558 23.3659C16.9844 23.3703 15.1385 21.532 15.1341 19.2599Z"
+                                            fill="white"></path>
+                                    </mask>
+                                    <g mask="url(#mask0_191_3373)">
+                                        <mask id="mask1_191_3373" style="mask-type:luminance" maskUnits="userSpaceOnUse"
+                                            x="5" y="5" width="28" height="28">
+                                            <path d="M32.573 5.94336H5.91406V32.6026H32.573V5.94336Z" fill="white">
+                                            </path>
+                                        </mask>
+                                        <g mask="url(#mask1_191_3373)">
+                                            <mask id="mask2_191_3373" style="mask-type:luminance"
+                                                maskUnits="userSpaceOnUse" x="5" y="5" width="28" height="28">
+                                                <path d="M32.687 5.82031H5.78125V32.7265H32.687V5.82031Z" fill="white">
+                                                </path>
+                                            </mask>
+                                            <g mask="url(#mask2_191_3373)">
+                                                <mask id="mask3_191_3373" style="mask-type:luminance"
+                                                    maskUnits="userSpaceOnUse" x="5" y="5" width="28" height="28">
+                                                    <path d="M32.687 5.82031H5.78125V32.7265H32.687V5.82031Z"
+                                                        fill="white"></path>
+                                                </mask>
+                                                <g mask="url(#mask3_191_3373)">
+                                                    <rect x="5.76562" y="5.81641" width="26.9196" height="26.9196"
+                                                        fill="white"></rect>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+                        </a>
+                        <a href="#">
+                            <!-- <img src="img/youtube_g.png" alt="유튜브"> -->
+                            <svg class="youtube_svg" width="38" height="38" viewBox="0 0 38 38" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g opacity="0.2">
+                                    <path
+                                        d="M19.5909 8.9082C20.2826 8.91209 22.0133 8.92893 23.8529 9.00277L24.5058 9.03127C26.357 9.11807 28.2069 9.26834 29.1253 9.52354C30.3495 9.86813 31.3108 10.8708 31.6359 12.1429C32.1541 14.1638 32.2189 18.1046 32.2266 19.0593L32.2279 19.2562V19.4816C32.2189 20.4364 32.1541 24.3784 31.6359 26.398C31.3069 27.674 30.3444 28.678 29.1253 29.0174C28.2069 29.2726 26.357 29.4229 24.5058 29.5097L23.8529 29.5395C22.0133 29.612 20.2826 29.6301 19.5909 29.6327L19.2864 29.634H18.9561C17.4922 29.625 11.37 29.5589 9.42161 29.0174C8.19871 28.6728 7.23619 27.6701 6.91104 26.398C6.39286 24.3771 6.32809 20.4364 6.32031 19.4816V19.0593C6.32809 18.1046 6.39286 14.1625 6.91104 12.1429C7.24008 10.8669 8.20259 9.86295 9.4229 9.52483C11.37 8.98204 17.4935 8.91598 18.9574 8.9082H19.5909ZM16.6826 14.7377V23.8058L24.4553 19.2718L16.6826 14.7377Z"
+                                        fill="white"></path>
+                                </g>
+                            </svg>
+                        </a>
+                        <a href="#">
+                            <!-- <img src="img/phone_g.png" alt="카카오톡"> -->
+                            <svg width="38" height="38" viewBox="0 0 38 38" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M18.996 8.06055C25.6748 8.06055 31.0881 12.2797 31.0881 17.4857C31.0881 22.6905 25.6748 26.9097 18.9972 26.9097C18.3322 26.91 17.668 26.8677 17.0085 26.783L11.9326 30.1028C11.3557 30.408 11.1519 30.3746 11.3891 29.6273L12.4162 25.392C9.09989 23.7108 6.90625 20.7975 6.90625 17.4857C6.90625 12.2809 12.3184 8.06055 18.9972 8.06055H18.996ZM25.7992 17.3418L27.4919 15.702C27.5896 15.6006 27.6441 15.4652 27.6439 15.3244C27.6437 15.1835 27.5889 15.0483 27.491 14.9471C27.3931 14.8459 27.2597 14.7866 27.1189 14.7818C26.9782 14.777 26.8411 14.827 26.7365 14.9213L24.5164 17.07V15.2944C24.5164 15.1502 24.4591 15.012 24.3572 14.91C24.2552 14.8081 24.117 14.7509 23.9729 14.7509C23.8287 14.7509 23.6905 14.8081 23.5885 14.91C23.4866 15.012 23.4293 15.1502 23.4293 15.2944V18.2388C23.409 18.3228 23.409 18.4104 23.4293 18.4944V20.1515C23.4293 20.2956 23.4866 20.4339 23.5885 20.5358C23.6905 20.6377 23.8287 20.695 23.9729 20.695C24.117 20.695 24.2552 20.6377 24.3572 20.5358C24.4591 20.4339 24.5164 20.2956 24.5164 20.1515V18.5819L25.0081 18.1064L26.6524 20.4474C26.6935 20.5058 26.7457 20.5556 26.806 20.5939C26.8662 20.6322 26.9335 20.6582 27.0039 20.6705C27.0742 20.6828 27.1463 20.6811 27.216 20.6656C27.2857 20.65 27.3517 20.6209 27.4101 20.5798C27.4686 20.5388 27.5184 20.4866 27.5566 20.4263C27.5949 20.366 27.621 20.2988 27.6333 20.2284C27.6456 20.158 27.6439 20.0859 27.6283 20.0162C27.6128 19.9465 27.5836 19.8806 27.5426 19.8221L25.7992 17.3406V17.3418ZM22.393 19.5573H20.7118V15.3116C20.7053 15.172 20.6453 15.0401 20.5442 14.9436C20.4431 14.847 20.3086 14.7931 20.1688 14.7931C20.029 14.7931 19.8946 14.847 19.7934 14.9436C19.6923 15.0401 19.6323 15.172 19.6259 15.3116V20.1008C19.6259 20.4002 19.8677 20.6443 20.1682 20.6443H22.393C22.5371 20.6443 22.6754 20.587 22.7773 20.4851C22.8792 20.3832 22.9365 20.2449 22.9365 20.1008C22.9365 19.9566 22.8792 19.8184 22.7773 19.7165C22.6754 19.6145 22.5371 19.5573 22.393 19.5573ZM15.6486 18.301L16.45 16.3342L17.1847 18.2998L15.6486 18.301ZM18.5538 18.8618L18.5561 18.8433C18.5559 18.7064 18.5036 18.5747 18.4099 18.4748L17.2054 15.2506C17.1549 15.097 17.0587 14.9624 16.9297 14.8648C16.8007 14.7673 16.645 14.7115 16.4834 14.7048C16.3206 14.7041 16.1615 14.7529 16.0272 14.8449C15.8928 14.9368 15.7897 15.0675 15.7315 15.2195L13.8176 19.9119C13.7631 20.0454 13.7639 20.1951 13.8197 20.328C13.8755 20.4609 13.9819 20.5662 14.1153 20.6207C14.2488 20.6752 14.3984 20.6745 14.5313 20.6187C14.6643 20.5628 14.7696 20.4565 14.8241 20.323L15.2064 19.3869H17.59L17.9332 20.3081C17.9566 20.3769 17.9936 20.4404 18.0419 20.4947C18.0903 20.549 18.1491 20.593 18.2148 20.6242C18.2805 20.6554 18.3518 20.673 18.4245 20.6761C18.4972 20.6793 18.5697 20.6678 18.6378 20.6423C18.706 20.6169 18.7683 20.578 18.8212 20.5281C18.874 20.4781 18.9163 20.418 18.9455 20.3514C18.9747 20.2848 18.9903 20.213 18.9912 20.1403C18.9922 20.0676 18.9785 19.9954 18.9511 19.9281L18.5538 18.8618ZM14.7285 15.3174C14.7285 15.1734 14.6714 15.0354 14.5697 14.9335C14.468 14.8316 14.3301 14.7742 14.1861 14.7739H10.4495C10.3053 14.7739 10.1671 14.8311 10.0651 14.9331C9.96321 15.035 9.90595 15.1732 9.90595 15.3174C9.90595 15.4615 9.96321 15.5998 10.0651 15.7017C10.1671 15.8036 10.3053 15.8609 10.4495 15.8609H11.7852V20.163C11.7852 20.3071 11.8425 20.4454 11.9444 20.5473C12.0463 20.6492 12.1846 20.7065 12.3287 20.7065C12.4729 20.7065 12.6111 20.6492 12.7131 20.5473C12.815 20.4454 12.8723 20.3071 12.8723 20.163V15.8609H14.185C14.3291 15.8609 14.4674 15.8036 14.5693 15.7017C14.6712 15.5998 14.7285 15.4615 14.7285 15.3174Z"
+                                    fill="#5A5A5A"></path>
+                            </svg>
+                        </a>
+                    </div><!-- .sns_area end -->
+                </div><!-- .util end -->
+                <div class="info">
+                    <div class="customer-center">
+                        <h6 class="h6_ft">Customer Center</h6>
+                        <div class="info_cont">
+                            <a href="#">070-4131-5906</a>
+                            <p class="ft_p">
+                                대표 이메일 abib@fourco.co.kr <br>
+                                해외 문의 abib.global@gmail.com <br>
+                                중국 문의 abib.china@fourco.co.kr
+                            </p>
+                        </div><!-- .info_cont end -->
+                    </div><!-- .customer-center end -->
+                    <div class="account">
+                        <h6 class="h6_ft">Account </h6>
+                        <div class="info_cont">
+                            <p class="ft_p">하나은행 183-910033-77004 (주)포컴퍼니</p>
+                        </div><!-- .info_cont end -->
+                    </div><!-- .account end -->
+                    <div class="shipping">
+                        <h6 class="h6_ft">Shipping & Return Center </h6>
+                        <div class="info_cont">
+                            <p class="ft_p">서울시 송파구 백제고분로9길 14, 301(잠실동)</p>
+                        </div><!-- .info_cont end -->
+                    </div><!-- .shipping end -->
+                    <div class="shopping-guide">
+                        <h6 class="h6_ft">Shopping guide</h6>
+                        <div class="info_cont">
+                            <a href="#">
+                                <p class="ft_p">공지사항</p>
+                            </a>
+                            <a href="#">
+                                <p class="ft_p">Q&A</p>
+                            </a>
+                            <a href="#">
+                                <p class="ft_p">리뷰</p>
+                            </a>
+                            <a href="#">
+                                <p class="ft_p">주문조회</p>
+                            </a>
+                        </div><!-- .info_cont end -->
+                    </div><!-- .shopping-guide end -->
+                </div><!-- .info end -->
+                <address>
+                    <div class="addr">
+                        <p class="ft_p">회사: (주)포컴퍼니</p>
+                        <p class="ft_p">대표: 김민우</p>
+                        <p class="ft_p">사업자등록번호: 232-88-00610 사업자정보확인</p>
+                        <p class="ft_p">통신판매업신고: 2017-서울송파-0651</p>
+                        <p class="ft_p">호스팅제공 : 카페24(주)</p>
+                    </div><!-- .addr end -->
+                </address>
+                <p class="ft_p copyright">Copyright © ABIB All Rights Reserved.</p>
+            </div><!-- .ft_inner end -->
+        </footer><!-- .footer end -->
+        <section class="footer_mobile mobile">
+            <div class="gnb_wrap">
+                <ul class="gnb">
+                    <li class="depth01">
+                        <div class="accordion">
+                            <span>Customer Center</span>
+                            <img class="footer_mobile--drop-btn" src="img/arrow-for-ftIcon.png" alt="더보기">
+                        </div>
+                        <ul class="depth02">
+                            <li>
+                                <a class="tele" href="#">070-4131-5906</a>
+                                <div class="footer_mobile--text-box">
+                                    <p>대표 이메일 abib@fourco.co.kr</p>
+                                    <p>해외 문의 abib.global@gmail.com</p>
+                                    <p>중국 문의 abib.china@fourco.co.kr</p>
+                                </div>
+                            </li>
+                        </ul><!-- .depth02 end -->
+                    </li><!-- .depth01 end /1-->
+                    <li class="depth01">
+                        <div class="accordion">
+                            <span>Account</span>
+                            <img class="footer_mobile--drop-btn" src="img/arrow-for-ftIcon.png" alt="더보기">
+                        </div>
+                        <ul class="depth02">
+                            <li>하나은행 183-910033-77004 (주)포컴퍼니</li>
+                        </ul><!-- .depth02 end -->
+                    </li><!-- .depth01 end /2-->
+                    <li class="depth01">
+                        <div class="accordion">
+                            <span>Shipping & Return Center</span>
+                            <img class="footer_mobile--drop-btn" src="img/arrow-for-ftIcon.png" alt="더보기">
+                        </div>
+                        <ul class="depth02">
+                            <li>서울시 송파구 백제고분로9길 14, 301(잠실동)</li>
+                        </ul><!-- .depth02 end -->
+                    </li><!-- .depth01 end /3-->
+                    <li class="depth01">
+                        <div class="accordion">
+                            <span>Shopping guide</span>
+                            <img class="footer_mobile--drop-btn" src="img/arrow-for-ftIcon.png" alt="더보기">
+                        </div>
+                        <ul class="depth02 footer_mobile--shopping-guide ">
+                            <li><a href="#">공지사항</a></li>
+                            <li><a href="#">Q&A</a></li>
+                            <li><a href="#">리뷰</a></li>
+                            <li><a href="#">주문조회</a></li>
+                        </ul><!-- .depth02 end -->
+                    </li><!-- .depth01 end /4-->
+                </ul><!-- .gnb end -->
+            </div><!-- .gnb_wrap end -->
+            <div class="footer_mobile--inner">
+                <h1>
+                    <a href="#">
+                        <img src="img/logo_white.png" alt="Abib">
+                    </a>
+                </h1>
+                <div class="footer_mobile--sns_area">
+                    <a href="#"><img src="img/instagram_g.png" alt="인스타그램 바로가기"></a>
+                    <a href="#"><img src="img/youtube_g.png" alt="유튜브 바로가기"></a>
+                    <a href="#"><img src="img/phone_g.png" alt="카카오톡 바로가기"></a>
+                </div>
+                <div class="footer_mobile--text-box">
+                    <p>회사: (주)포컴퍼니 대표: 김민우</p>
+                    <p>사업자등록번호: 232-88-00610</p>
+                    <p>사업자정보확인 통신판매업신고: 2017-서울송파-0651</p>
+                    <p>호스팅제공 : 카페24(주)</p>
+                </div><!-- .text-box end -->
+                <p class="footer_mobile--copyright">Copyright © ABIB All Rights Reserved.</p>
+            </div><!-- .footer_mobile--inner end -->
+        </section><!-- .footer_mobile end -->
+    </div><!-- #wrap end -->
+</body>
+
+</html>
