@@ -1369,6 +1369,18 @@ address .addr .ft_p:last-child::after {
     cursor: pointer;
 }
 
+@media screen and (max-width: 1088px) {
+    .header .gnb-pc {
+        display: none;
+    }
+    .pc_mainmenu_inner {
+        display: none;
+    }
+    .mobile_mainmenu_inner {
+        display: block;
+    }
+
+}
 @media screen and (max-width:767px) {        
     html, body {
         font-size: 50%; /* 8px */
