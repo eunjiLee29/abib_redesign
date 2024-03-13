@@ -1368,7 +1368,11 @@ address .addr .ft_p:last-child::after {
 .footer_mobile--drop-btn {
     cursor: pointer;
 }
-
+@media screen and (max-width:1712px) {
+    .scroll_btn {
+        display: none !important;
+    }
+}
 @media screen and (max-width: 1088px) {
     .header .gnb-pc {
         display: none;
