@@ -754,6 +754,7 @@ html, body {
 }
 .swiper-wrapper {
     position: static;
+    padding-bottom: 5px;
 }
 .swiper.abib-product {
     display: none;
